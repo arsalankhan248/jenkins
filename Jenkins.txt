@@ -3,51 +3,69 @@ pipeline {
 
     environment {
         DIRECTORY_PATH = "Deakin university\\Trimester2\\SIT753 Professional Practice\\Jenkins"
-        TESTING_ENVIRONMENT = "Test1"
-        PRODUCTION_ENVIRONMENT = "Arsalan"
+        TESTING_ENVIRONMENT = "Testing"
+        PRODUCTION_ENVIRONMENT = "Arsalan Khan"
     }
 
     stages {
         stage('Build') {
             steps {
-                echo "Fetch the source code from the directory path specified by the environment variable."
-                echo "Compile the code and generate any necessary artifacts."
+                echo "Retrieve the source code from the path to the directory that the environment variable has supplied."
+                echo "Compile the code, and create any artefacts that are required."
             }
         }
 
         stage('Test') {
             steps {
                 echo "Run unit tests."
-                echo "Run integration tests."
+                echo "Implementation tests."
+            }
+            post{
+                success{
+                    mail to: "arsalan.k.13.21.15@gmail.com",
+                    subject: "Test Stage Status Email",
+                    body: "Tests are successful!!"
+                }
             }
         }
 
-        stage('Code Quality Check') {
+        stage('Code Analysis') {
             steps {
                 echo "Check the quality of the code."
             }
         }
 
-        stage('Deploy') {
+        stage('Security Scan') {
             steps {
-                echo "Deploy the application to a testing environment specified by the environment variable."
+                echo "Performing a security scan on the code"
+            }
+            post{
+                success{
+                    mail to: "arsalan.k.13.21.15@gmail.com",
+                    subject: "Security Scan Stage Status Email",
+                    body: "Scan for security is successful."
+                }
             }
         }
 
-        stage('Approval') {
+        stage('Deploy to staging') {
             steps {
-                echo "Waiting for approval..."
-                sleep time: 10, unit: 'SECONDS'
+                echo "Deploying the application to a staging server"
             }
         }
 
+        stage('Test on staging') {
+            steps {
+                echo "Run integration tests"
+            }
+        }
         stage('Deploy to Production') {
-            when {
-                environment name: 'APPROVED', value: 'true'
-            }
+            
             steps {
                 echo "Deploy the code to the production environment ${PRODUCTION_ENVIRONMENT}."
             }
         }
     }
 }
+
+
