@@ -14,7 +14,7 @@ pipeline {
                 echo "Compile the code, and create any artefacts that are required."
             }
         }
-// email
+// email is associated
         stage('Test') {
             steps {
                 echo "Run unit tests."
